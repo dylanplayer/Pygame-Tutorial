@@ -8,12 +8,14 @@ from GameObject import Strawberry
 from GameObject import Bomb
 from GameObject import Player
 
-points = 0
+score = 0
 
 screen_height = 500
 screen_width = 500
 screen = pygame.display.set_mode([screen_width, screen_height])
 background_color = (0, 0, 0)
+
+font = pygame.font.SysFont(None, 24)
 
 all_sprites = pygame.sprite.Group()
 fruit_sprites = pygame.sprite.Group()
@@ -63,7 +65,7 @@ while running:
     
     collided_fruit = get_collided_sprite(player, fruit_sprites)
     if collided_fruit:
-        points += 1
+        score += 1
         collided_fruit.speed += .2
         bomb.reset()
         while (get_collided_sprite(player, bombs)) :
@@ -76,6 +78,9 @@ while running:
 
     for sprite in all_sprites:
         sprite.render(screen)
+
+    score_obj = font.render(f'Score: {score}', True, (255, 255, 255))
+    screen.blit(score_obj, (50,50))
 
     pygame.display.flip()
     clock.tick(frames_per_second * 2)
