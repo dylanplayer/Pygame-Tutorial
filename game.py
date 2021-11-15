@@ -3,8 +3,8 @@ from pygame.locals import *
 pygame.init()
 
 from GameObject import GameObject
-from GameObject import Apple
-from GameObject import Strawberry
+from GameObject import Bird1
+from GameObject import Bird2
 from GameObject import Bomb
 from GameObject import Player
 
@@ -26,22 +26,25 @@ running = True
 frames_per_second = 30
 clock = pygame.time.Clock()
 
-apple = Apple()
-all_sprites.add(apple)
-fruit_sprites.add(apple)
-strawberry = Strawberry()
-all_sprites.add(strawberry)
-fruit_sprites.add(strawberry)
+bird1 = Bird1()
+all_sprites.add(bird1)
+fruit_sprites.add(bird1)
+bird2 = Bird2()
+all_sprites.add(bird2)
+fruit_sprites.add(bird2)
 bomb =  Bomb()
 all_sprites.add(bomb)
 bombs.add(bomb)
 player = Player()
 all_sprites.add(player)
 
+
 def get_collided_sprite(player, sprite_list):
     for sprite in sprite_list:
         if pygame.Rect.colliderect(player.rect, sprite.rect):
             return sprite
+
+frame_counter = 0
 
 while running:
     for event in pygame.event.get():
@@ -60,13 +63,21 @@ while running:
                 player.down()
     screen.fill(background_color)
     
-    apple.move()
-    strawberry.move()
+    frame_counter += 1
+
+    if frame_counter % 5 == 0:
+        bird1.update()
+        bird2.update()
+        player.update()
+        bomb.update()
+
+    bird1.move()
+    bird2.move()
     
     collided_fruit = get_collided_sprite(player, fruit_sprites)
     if collided_fruit:
         score += 1
-        collided_fruit.speed += .2
+        collided_fruit.speed += .01
         bomb.reset()
         while (get_collided_sprite(player, bombs)) :
             bomb.reset()
